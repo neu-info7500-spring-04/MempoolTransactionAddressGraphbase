@@ -1,60 +1,64 @@
 openapi: 3.0.0
 info:
-  title: Mining Pools Mempool API
+  title: Mining Pools Mempool GraphQL API
   version: 1.0.0
 paths:
-  /api/address/{address}/utxo:
-    get:
-      summary: Get UTXOs for a specific address
-      description: Returns the list of Unspent Transaction Outputs (UTXOs) for a given address
-      parameters:
-        - in: path
-          name: address
-          required: true
-          schema:
-            type: string
-          description: The address for which to retrieve UTXOs
+  /graphql:
+    post:
+      summary: Execute GraphQL queries
+      operationId: executeGraphQLQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The GraphQL query
+                variables:
+                  type: object
+                  description: The variables for the GraphQL query
       responses:
         '200':
-          description: OK
+          description: Successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    txid:
-                      type: string
-                      description: The transaction ID of the UTXO
-                    vout:
-                      type: integer
-                      description: The output index of the UTXO
-                    status:
-                      type: object
-                      properties:
-                        confirmed:
-                          type: boolean
-                          description: Indicates whether the UTXO is confirmed
-                        block_height:
-                          type: integer
-                          description: The height of the block containing the UTXO
-                        block_hash:
-                          type: string
-                          description: The hash of the block containing the UTXO
-                        block_time:
-                          type: integer
-                          description: The timestamp of the block containing the UTXO
-                      description: Status of the UTXO
-                    value:
-                      type: integer
-                      description: The value of the UTXO in satoshis
-              example:
-                - txid: "5f3dafcdd142358b332e0939d37174b76472735df8df29325901d2c7d18a152c"
-                  vout: 476
-                  status:
-                    confirmed: true
-                    block_height: 834708
-                    block_hash: "00000000000000000000292964b4b00d1d414583bd18d1ebea7a8041d4409c6d"
-                    block_time: 1710447063
-                  value: 546
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: The result of the GraphQL query
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GraphQLError'
+
+components:
+  schemas:
+    GraphQLError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Description of the error
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+    Location:
+      type: object
+      properties:
+        line:
+          type: integer
+          description: Line number of the error in the GraphQL query
+        column:
+          type: integer
+          description: Column number of the error in the GraphQL query
+        path:
+          type: array
+          items:
+            type: string
+          description: Path to the field in the GraphQL query where the error occurred
