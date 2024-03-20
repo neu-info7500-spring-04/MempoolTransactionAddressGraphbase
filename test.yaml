@@ -1,0 +1,56 @@
+paths:
+  /api/address/{address}/utxo:
+    get:
+      summary: Get UTXOs for a specific address
+      description: Returns the list of Unspent Transaction Outputs (UTXOs) for a given address
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+          description: The address for which to retrieve UTXOs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    txid:
+                      type: string
+                      description: The transaction ID of the UTXO
+                    vout:
+                      type: integer
+                      description: The output index of the UTXO
+                    status:
+                      type: object
+                      properties:
+                        confirmed:
+                          type: boolean
+                          description: Indicates whether the UTXO is confirmed
+                        block_height:
+                          type: integer
+                          description: The height of the block containing the UTXO
+                        block_hash:
+                          type: string
+                          description: The hash of the block containing the UTXO
+                        block_time:
+                          type: integer
+                          description: The timestamp of the block containing the UTXO
+                      description: Status of the UTXO
+                    value:
+                      type: integer
+                      description: The value of the UTXO in satoshis
+              example:
+                - txid: "5f3dafcdd142358b332e0939d37174b76472735df8df29325901d2c7d18a152c"
+                  vout: 476
+                  status:
+                    confirmed: true
+                    block_height: 834708
+                    block_hash: "00000000000000000000292964b4b00d1d414583bd18d1ebea7a8041d4409c6d"
+                    block_time: 1710447063
+                  value: 546
