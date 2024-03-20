@@ -68,8 +68,6 @@ paths:
                     block_hash: "00000000000000000000292964b4b00d1d414583bd18d1ebea7a8041d4409c6d"
                     block_time: 1710447063
                   value: 546
-
-
   /lightning/nodes/countries:
     get:
       summary: Returns aggregate capacity and number of clearnet nodes per country.
@@ -84,7 +82,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/countryNodeStats"
-  
   /lightning/nodes/isp-ranking:
     get:
       summary: Returns aggregate capacity, number of nodes, and number of channels per ISP. Capacity figures are in satoshis.
@@ -96,7 +93,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ispRankingStats"
-
 components:
   schemas:
     miningpool:
@@ -112,7 +108,6 @@ components:
         lastEstimatedHashrate:
           type: number
           description: Last estimated hashrate
-
     pool:
       type: object
       properties:
@@ -147,7 +142,6 @@ components:
         poolUniqueId:
           type: integer
           description: The unique ID of the pool
-
     countryNodeStats:
       type: object
       properties:
@@ -171,7 +165,6 @@ components:
           format: float
         capacity:
           type: string
-          
     ispRankingStats:
       type: object
       properties:
@@ -189,6 +182,3 @@ components:
               anyOf:
                 - type: string
                 - type: integer
-#
-
- 
