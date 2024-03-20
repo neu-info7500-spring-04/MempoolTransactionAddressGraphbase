@@ -13,7 +13,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/miningpool"
-   /api/address/{address}/utxo:
+  /api/address/{address}/utxo:
     get:
       summary: Get UTXOs for a specific address
       description: Returns the list of Unspent Transaction Outputs (UTXOs) for a given address
