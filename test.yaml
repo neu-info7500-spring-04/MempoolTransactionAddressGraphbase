@@ -1,64 +1,53 @@
 openapi: 3.0.0
 info:
-  title: Mining Pools Mempool GraphQL API
+  title: Bitcoin Address UTXO API
   version: 1.0.0
 paths:
-  /graphql:
-    post:
-      summary: Execute GraphQL queries
-      operationId: executeGraphQLQuery
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: The GraphQL query
-                variables:
-                  type: object
-                  description: The variables for the GraphQL query
+  /address/{address}/utxo:
+    get:
+      summary: Get unspent transaction outputs (UTXOs) for a Bitcoin address
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+          description: The Bitcoin address for which to retrieve UTXOs
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    description: The result of the GraphQL query
-                  errors:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GraphQLError'
-
+                type: array
+                items:
+                  $ref: "#/components/schemas/utxo"
 components:
   schemas:
-    GraphQLError:
+    utxo:
       type: object
       properties:
-        message:
+        txid:
           type: string
-          description: Description of the error
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Location'
-    Location:
-      type: object
-      properties:
-        line:
+          description: The transaction ID
+        vout:
           type: integer
-          description: Line number of the error in the GraphQL query
-        column:
+          description: The index of the output in the transaction
+        status:
+          type: object
+          properties:
+            confirmed:
+              type: boolean
+              description: Indicates if the transaction is confirmed
+            block_height:
+              type: integer
+              description: The height of the block in which the transaction was included
+            block_hash:
+              type: string
+              description: The hash of the block in which the transaction was included
+            block_time:
+              type: integer
+              description: The timestamp of the block in which the transaction was included
+        value:
           type: integer
-          description: Column number of the error in the GraphQL query
-        path:
-          type: array
-          items:
-            type: string
-          description: Path to the field in the GraphQL query where the error occurred
+          description: The value of the unspent output in satoshis
