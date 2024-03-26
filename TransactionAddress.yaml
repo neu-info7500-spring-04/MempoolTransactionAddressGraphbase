@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Bitcoin Address UTXO API
+  title: Bitcoin Address APIs
   version: 1.0.0
 paths:
   /address/{address}/utxo:
@@ -22,6 +22,29 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/utxo"
+
+  /address/{address}/txs:
+    get:
+      summary: Get transactions for a Bitcoin address
+      description: Retrieve transactions associated with a given Bitcoin address.
+      operationId: getAddressTransactions
+      parameters:
+        - name: address
+          in: path
+          description: The Bitcoin address for which to retrieve transactions
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A list of transactions associated with the provided address
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+
 components:
   schemas:
     utxo:
@@ -51,3 +74,40 @@ components:
         value:
           type: integer
           description: The value of the unspent output in satoshis
+
+    Transaction:
+      type: object
+      properties:
+        txid:
+          type: string
+          description: The transaction ID
+        vout:
+          type: integer
+          description: The transaction output index
+        status:
+          type: object
+          properties:
+            confirmed:
+              type: boolean
+              description: Indicates if the transaction is confirmed
+            block_height:
+              type: integer
+              description: The height of the block in which the transaction was included
+            block_hash:
+              type: string
+              description: The hash of the block in which the transaction was included
+            block_time:
+              type: integer
+              description: The timestamp of the block in which the transaction was included
+        value:
+          type: integer
+          description: The value of the transaction output in satoshis
+        size:
+          type: integer
+          description: The size of the transaction
+        weight:
+          type: integer
+          description: The weight of the transaction
+        fee:
+          type: integer
+          description: The fee of the transaction in satoshis
